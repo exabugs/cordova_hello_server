@@ -66,10 +66,22 @@ router.post('/', function(req, res) {
 
       function(data, next) {
 
+        var message = 'APNs Registered and Received Message ! ';
+        var data = {
+          data: {
+            message: message
+          },
+          aps: {
+            alert: message
+          }
+        };
+
         var params = {
-          TargetArn: data.EndpointArn,
-          Message: 'APNs Registered and Received Message ! ',
-          Subject: 'TestSNS'
+          //Message: 'APNs Registered and Received Message ! ',
+          MessageStructure: 'json',
+          Message: JSON.stringify(data),
+          //Subject: 'TestSNS',
+          TargetArn: data.EndpointArn
         };
 
         sns.publish(params, function(err, data) {
@@ -92,3 +104,107 @@ router.post('/', function(req, res) {
 });
 
 module.exports = router;
+
+// https://github.com/evanshortiss/sns-mobile/blob/master/lib/interface.js
+
+/**
+ * Convert a provided message to GCM format
+ * @param   {String/Object} message
+ * @return  {String}
+ */
+
+Interface.prototype.convertToGcmFormat = function(message, callback) {
+  // GCM format expected by amazon for messages
+  // {
+  //   GCM: JSON.stringify({
+  //     data: {
+  //       message:"<message>"
+  //     }
+  //   })
+  // }
+
+  var container = {}
+    , key = (this.platform === SUPPORTED_PLATFORMS.ANDROID) ? 'GCM' : 'ADM';
+
+  if (typeof message === 'string') {
+    try {
+      container[key] = JSON.stringify({
+        data: {
+          message: message
+        }
+      });
+
+      callback(null, container);
+    } catch (e) {
+      callback(e, null);
+    }
+  } else if (message != null && typeof message === 'object') {
+    if(message.GCM || message.ADM || message.default) {
+      callback(null, message);
+    } else {
+      try {
+        container[key] = JSON.stringify(message);
+
+        callback(null, container);
+      } catch (e) {
+        callback(e, null);
+      }
+    }
+  } else {
+    var e = new Error('Unable to convert message to ADM/GCM format. Message ' +
+    'must be String/Object.');
+
+    callback(e, null);
+  }
+};
+
+
+/**
+ * Convert a message to APNS format
+ * @param   {String/Object} message
+ * @return  {String}
+ */
+
+Interface.prototype.convertToApnsFormat = function (message, callback) {
+  // APNS format expected by amazon for messages
+  // {
+  //   APNS: JSON.stringify({
+  //     "aps": {
+  //       "alert": "<message>"
+  //     }
+  //   })
+  // }
+
+  var APNS = this.sandbox ? 'APNS_SANDBOX' : 'APNS'
+    , messageContainer = {};
+
+  if (typeof message === 'string') {
+    try {
+      messageContainer[APNS] = JSON.stringify({
+        aps: {
+          alert: message
+        }
+      });
+
+      callback(null, messageContainer);
+    } catch (e) {
+      callback(e, null);
+    }
+  } else if (message !== null && typeof message === 'object') {
+    if (message['APNS_SANDBOX'] || message['APNS']) {
+      callback(null, message);
+    } else {
+      try {
+        messageContainer[APNS] = JSON.stringify(message);
+        callback(null, messageContainer);
+      } catch (e) {
+        callback(e, null);
+      }
+    }
+  } else {
+    var e = new Error('Unable to convert message to APNS format. Message' +
+    ' must be String/Object.');
+
+    callback(e, null);
+  }
+};
