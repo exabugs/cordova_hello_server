@@ -74,19 +74,18 @@ router.post('/', function(req, res) {
 
         var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
+        var data = {
+          sound: 'default',
+          badge: 1,
+          alert: content
+        };
 
         var message = {
           GCM: JSON.stringify({
-            data: {
-              message: content
-            }
+            data: data
           }),
           APNS_SANDBOX: JSON.stringify({
-            aps: {
-              sound: 'default',
-              badge: 1,
-              alert: content
-            }
+            aps: data
           })
         };
 
