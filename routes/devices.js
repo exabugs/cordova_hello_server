@@ -85,7 +85,11 @@ router.post('/', function(req, res) {
             data: data
           }),
           APNS_SANDBOX: JSON.stringify({
-            aps: data
+            aps: {
+              sound: 'default',
+              badge: 1,
+              alert: content
+            }
           })
         };
 
