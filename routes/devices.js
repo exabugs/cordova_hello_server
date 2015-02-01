@@ -74,6 +74,10 @@ router.post('/', function(req, res) {
 
         var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
+
+        // GCMは任意のオブジェクトを渡すことができる
+        // APNSは、オブジェクトは指定されている
+        // だから、APNS形式で送ることにする。GCM(Android)は、APNS形式に合わせる。
         var data = {
           sound: 'default',
           badge: 1,
@@ -81,12 +85,8 @@ router.post('/', function(req, res) {
         };
 
         var message = {
-          GCM: JSON.stringify({
-            data: data
-          }),
-          APNS_SANDBOX: JSON.stringify({
-            aps: data
-          })
+          GCM: JSON.stringify({data: data}),
+          APNS_SANDBOX: JSON.stringify({aps: data})
         };
 
         console.log(JSON.stringify(message));
