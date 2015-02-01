@@ -76,26 +76,26 @@ router.post('/', function(req, res) {
         var content = 'APNs Registered and Received Message ! ';
 
         var message = {
-          data: {
-            message: content
-          },
-          default: title,
+          GCM: JSON.stringify({
+            data: {
+              message: content
+            }
+          }),
           APNS_SANDBOX: JSON.stringify({
             aps: {
+              sound: 'default',
+              badge: 1,
               alert: content
             }
           })
         };
-/*        {
-        default: "I am default":
-          APNS_SANDBOX: JSON.stringify({aps:{alert:"Hello and have a good day."}})
-        }
-*/
+
         console.log(JSON.stringify(message));
         var params = {
           //Message: 'APNs Registered and Received Message ! ',
           MessageStructure: 'json',
-          Message: JSON.stringify(message),
+          //Message: JSON.stringify(message),
+          Message: message,
           //Subject: 'TestSNS',
           TargetArn: data.EndpointArn
         };
