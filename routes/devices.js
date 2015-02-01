@@ -12,7 +12,7 @@ var devices = {};
 router.get('/', function(req, res) {
   res.send('respond with a resource');
   for(var regid in devices) {
-    var arn = devices[];
+    var arn = devices[regid];
     var content = 'hello hello';
 
     // GCMは任意のオブジェクトを渡すことができる
