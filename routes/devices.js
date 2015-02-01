@@ -70,23 +70,22 @@ router.post('/', function(req, res) {
         });
       },
 
-      function(data, next) {
+      function(context, next) {
 
         var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
+        var data = {
+          sound: 'default',
+          badge: 1,
+          alert: content
+        };
 
         var message = {
           GCM: JSON.stringify({
-            data: {
-              message: content
-            }
+            data: data
           }),
           APNS_SANDBOX: JSON.stringify({
-            aps: {
-              sound: 'default',
-              badge: 1,
-              alert: content
-            }
+            aps: data
           })
         };
 
@@ -94,7 +93,7 @@ router.post('/', function(req, res) {
         var params = {
           MessageStructure: 'json',
           Message: JSON.stringify(message),
-          TargetArn: data.EndpointArn
+          TargetArn: context.EndpointArn
         };
 
         sns.publish(params, function(err, data) {
