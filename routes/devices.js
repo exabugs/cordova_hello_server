@@ -85,6 +85,7 @@ router.post('/', function(req, res) {
         };
 
         sns.publish(params, function(err, data) {
+          err && console.log(err);
           next(err, data);
           /*
           if (err) {
