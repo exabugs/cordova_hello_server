@@ -77,11 +77,18 @@ router.post('/', function(req, res) {
           data: {
             message: content
           },
-          aps: {
-            alert: content
+          default: "I am default",
+          APNS_SANDBOX: {
+            aps: {
+              alert: content
+            }
           }
         };
-
+/*        {
+        default: "I am default":
+          APNS_SANDBOX: JSON.stringify({aps:{alert:"Hello and have a good day."}})
+        }
+*/
         console.log(JSON.stringify(message));
         var params = {
           //Message: 'APNs Registered and Received Message ! ',
