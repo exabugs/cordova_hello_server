@@ -27,24 +27,24 @@ router.post('/', function(req, res) {
   //var arn = [arn_id, platform, app_id].join('/');
 
   /*
-  var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS_SANDBOX/jp.co.dreamarts.cordovaHello';
-  var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS/jp.co.dreamarts.cordovaHello';
-  var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/GCM/jp.co.dreamarts.cordovaHello';
-  var epa = 'arn:aws:sns:ap-northeast-1:521185453080:endpoint/GCM/cordova_hello/bdf3b2b3-6866-34c7-a9f0-c6fa6ecb6b62';
-  */
+   var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS_SANDBOX/jp.co.dreamarts.cordovaHello';
+   var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS/jp.co.dreamarts.cordovaHello';
+   var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/GCM/jp.co.dreamarts.cordovaHello';
+   var epa = 'arn:aws:sns:ap-northeast-1:521185453080:endpoint/GCM/cordova_hello/bdf3b2b3-6866-34c7-a9f0-c6fa6ecb6b62';
+   */
 
   async.waterfall([
-/*
-      function(next) {
-        var params = {
-          PlatformApplicationArn: arn
-        };
-        sns.listEndpointsByPlatformApplication(params, function(err, data) {
-          if (err) console.log(err, err.stack); // an error occurred
-          else     console.log(data);           // successful response
-        });
-      },
-*/
+      /*
+       function(next) {
+       var params = {
+       PlatformApplicationArn: arn
+       };
+       sns.listEndpointsByPlatformApplication(params, function(err, data) {
+       if (err) console.log(err, err.stack); // an error occurred
+       else     console.log(data);           // successful response
+       });
+       },
+       */
       function(next) {
         var arn = [arn_id, platform, app_id].join('/');
         console.log(arn);
@@ -63,10 +63,10 @@ router.post('/', function(req, res) {
           console.log(JSON.stringify(data));
           next(err, data);
 
-/*
-          if (err) console.log(err, err.stack); // an error occurred
-          else     console.log(data);           // successful response
-*/
+          /*
+           if (err) console.log(err, err.stack); // an error occurred
+           else     console.log(data);           // successful response
+           */
         });
       },
 
@@ -74,15 +74,12 @@ router.post('/', function(req, res) {
 
         var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
-        var data = {
-          sound: 'default',
-          badge: 1,
-          alert: content
-        };
 
         var message = {
           GCM: JSON.stringify({
-            data: data
+            data: {
+              message: content
+            }
           }),
           APNS_SANDBOX: JSON.stringify({
             aps: {
@@ -104,12 +101,12 @@ router.post('/', function(req, res) {
           err && console.log(err);
           next(err, data);
           /*
-          if (err) {
-            console.log('Error sending a message', err);
-          } else {
-            console.log('Sent message:', data.MessageId);
-          }
-          */
+           if (err) {
+           console.log('Error sending a message', err);
+           } else {
+           console.log('Sent message:', data.MessageId);
+           }
+           */
         });
       }
 
