@@ -6,9 +6,42 @@ var AWS = require('aws-sdk');
 // https://console.developers.google.com/project/warm-skill-823/apiui/api?authuser=0
 // Google Cloud Messaging for Android
 
+var devices = {};
+
 /* GET devices listing. */
 router.get('/', function(req, res) {
   res.send('respond with a resource');
+  for(var regid in devices) {
+    var arn = devices[];
+    var content = 'hello hello';
+
+    // GCMは任意のオブジェクトを渡すことができる
+    // APNSは、オブジェクトは指定されている
+    // だから、APNS形式で送ることにする。GCM(Android)は、APNS形式に合わせる。
+    var data = {
+      sound: 'default',
+      badge: 1,
+      alert: content
+    };
+
+    var message = {
+      GCM: JSON.stringify({data: data}),
+      APNS_SANDBOX: JSON.stringify({aps: data})
+    };
+
+    console.log(JSON.stringify(message));
+    var params = {
+      MessageStructure: 'json',
+      Message: JSON.stringify(message),
+      TargetArn: arn
+    };
+
+    sns.publish(params, function(err, data) {
+      err && console.log(err);
+      next(err, data);
+    });
+
+  }
 });
 
 router.post('/', function(req, res) {
@@ -61,6 +94,7 @@ router.post('/', function(req, res) {
         sns.createPlatformEndpoint(params, function(err, data) {
           err && console.log(err);
           console.log(JSON.stringify(data));
+          devices[regid] = data.EndpointArn;
           next(err, data);
 
           /*
