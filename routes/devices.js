@@ -45,6 +45,7 @@ router.post('/', function(req, res) {
 */
       function(next) {
         var arn = [arn_id, platform, app_id].join('/');
+        console.log(arn);
 
         var params = {
           // todo: UserDatan無しで登録。ユーザとの紐付けはアプリ側で行うように。
@@ -56,7 +57,10 @@ router.post('/', function(req, res) {
           Token: regid /* required */
         };
         sns.createPlatformEndpoint(params, function(err, data) {
+          err && console.log(err);
+          console.log(JSON.stringify(data));
           next(err, data);
+
 /*
           if (err) console.log(err, err.stack); // an error occurred
           else     console.log(data);           // successful response
