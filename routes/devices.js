@@ -75,7 +75,7 @@ router.post('/', function(req, res) {
         var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
         var data = {
-          message: content,
+          message: null,
           sound: 'default',
           badge: 1,
           alert: content
