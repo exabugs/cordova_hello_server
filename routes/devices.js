@@ -22,6 +22,7 @@ router.get('/', function(req, res) {
     // APNSは、オブジェクトは指定されている
     // だから、APNS形式で送ることにする。GCM(Android)は、APNS形式に合わせる。
     var data = {
+      message: content,
       sound: 'default',
       badge: 1,
       alert: content
