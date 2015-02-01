@@ -3,6 +3,9 @@ var router = express.Router();
 var async = require('async');
 var AWS = require('aws-sdk');
 
+// https://console.developers.google.com/project/warm-skill-823/apiui/api?authuser=0
+// Google Cloud Messaging for Android
+
 /* GET devices listing. */
 router.get('/', function(req, res) {
   res.send('respond with a resource');
@@ -11,10 +14,22 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
 
   var regid = req.body.regid;
+  var platform = req.body.platform;
 
   var sns = new AWS.SNS();
 
+  var arn_id = 'arn:aws:sns:ap-northeast-1:521185453080:app';
+  //var platform = 'APNS_SANDBOX';
+  var app_id = 'jp.co.dreamarts.cordovaHello';
+
+  //var arn = [arn_id, platform, app_id].join('/');
+
+  /*
   var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS_SANDBOX/jp.co.dreamarts.cordovaHello';
+  var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/APNS/jp.co.dreamarts.cordovaHello';
+  var arn = 'arn:aws:sns:ap-northeast-1:521185453080:app/GCM/jp.co.dreamarts.cordovaHello';
+  var epa = 'arn:aws:sns:ap-northeast-1:521185453080:endpoint/GCM/cordova_hello/bdf3b2b3-6866-34c7-a9f0-c6fa6ecb6b62';
+  */
 
   async.waterfall([
 /*
@@ -29,6 +44,8 @@ router.post('/', function(req, res) {
       },
 */
       function(next) {
+        var arn = [arn_id, platform, app_id].join('/');
+
         var params = {
           // todo: UserDatan無しで登録。ユーザとの紐付けはアプリ側で行うように。
           // todo: ユーザがアプリにログインしたらデバイスID(Token)を送るようにする。
