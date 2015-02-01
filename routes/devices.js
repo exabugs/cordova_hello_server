@@ -10,6 +10,8 @@ var devices = {};
 
 /* GET devices listing. */
 router.get('/', function(req, res) {
+  var sns = new AWS.SNS();
+
   var regids = Object.keys(devices);
 
   async.each(regids, function(regid, next) {
@@ -45,10 +47,6 @@ router.get('/', function(req, res) {
   }, function(err) {
     res.send('respond with a resource');
   });
-
-  for(var regid in devices) {
-
-  }
 
 });
 
