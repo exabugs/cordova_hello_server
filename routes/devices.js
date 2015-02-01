@@ -16,6 +16,8 @@ router.post('/', function(req, res) {
   var regid = req.body.regid;
   var platform = req.body.platform;
 
+  console.log('regid : ' + regid + '   platform :' + platform);
+
   var sns = new AWS.SNS();
 
   var arn_id = 'arn:aws:sns:ap-northeast-1:521185453080:app';
@@ -70,19 +72,19 @@ router.post('/', function(req, res) {
 
       function(data, next) {
 
-        var title = 'title';
+        var title = 'I am default';
         var content = 'APNs Registered and Received Message ! ';
 
         var message = {
           data: {
             message: content
           },
-          default: "I am default",
-          APNS_SANDBOX: {
+          default: title,
+          APNS_SANDBOX: JSON.stringify({
             aps: {
               alert: content
             }
-          }
+          })
         };
 /*        {
         default: "I am default":
