@@ -1,5 +1,5 @@
 .idea
-src/.sass-cache
+public/.sass-cache
 www/
 bower_components
 node_modules
