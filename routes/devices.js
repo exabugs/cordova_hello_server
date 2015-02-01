@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 
   async.each(regids, function(regid, next) {
     var arn = devices[regid];
-    var content = 'hello hello';
+    var content = (new Date()).toString();
 
     // GCMは任意のオブジェクトを渡すことができる
     // APNSは、オブジェクトは指定されている
