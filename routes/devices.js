@@ -66,20 +66,23 @@ router.post('/', function(req, res) {
 
       function(data, next) {
 
-        var message = 'APNs Registered and Received Message ! ';
-        var data = {
+        var title = 'title';
+        var content = 'APNs Registered and Received Message ! ';
+
+        var message = {
           data: {
-            message: message
+            message: content
           },
           aps: {
-            alert: message
+            alert: content
           }
         };
 
+        console.log(JSON.stringify(message));
         var params = {
           //Message: 'APNs Registered and Received Message ! ',
           MessageStructure: 'json',
-          Message: JSON.stringify(data),
+          Message: JSON.stringify(message),
           //Subject: 'TestSNS',
           TargetArn: data.EndpointArn
         };
