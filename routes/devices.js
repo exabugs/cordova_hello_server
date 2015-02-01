@@ -10,8 +10,9 @@ var devices = {};
 
 /* GET devices listing. */
 router.get('/', function(req, res) {
-  res.send('respond with a resource');
-  for(var regid in devices) {
+  var regids = Object.keys(devices);
+
+  async.each(regids, function(regid, next) {
     var arn = devices[regid];
     var content = 'hello hello';
 
@@ -38,10 +39,17 @@ router.get('/', function(req, res) {
 
     sns.publish(params, function(err, data) {
       err && console.log(err);
-      next(err, data);
+      next();
     });
 
+  }, function(err) {
+    res.send('respond with a resource');
+  });
+
+  for(var regid in devices) {
+
   }
+
 });
 
 router.post('/', function(req, res) {
